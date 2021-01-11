@@ -1,0 +1,22 @@
+PINS:
+D2 - Clock 1
+D3 - Clock 2
+D4 - Clock 3
+D5 - Clock 4
+D6 - Clock EN
+D7 - Clock RS
+D8 - Button - Alarms (wire a "Sleep" button to intercept this)
+D9 - Snooze 
+D10 - Button Up 
+D11 - Button Down
+D12 - BUZZER
+
+BUTTONS X3
+
+Opt - Power switch 
+
+A1
+A2
+A3
+A4 - RTC
+A5 - RTC
