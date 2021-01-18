@@ -16,6 +16,7 @@
 
 #include <EEPROM.h>
 #include <math.h>
+#include "alarm.h"
 
 #define BASE_A1 1
 #define BASE_A2 6
@@ -42,16 +43,6 @@ int getBaseLocation(int alarmNum)
   }
 }
 
-Alarm[] getAlarmsFromMemory() 
-{
-  Alarm arr[] = {};
-  for(int i = 1; i <= 4; i++)
-  {
-    int pos = getBaseLocation(i)
-    arr[i-1] = getAlarm(pos);
-  }
-}
-
 Alarm getAlarm(int baseLocation)
 {
   int hrs = EEPROM.read(baseLocation + OFFSET_HOURS);
@@ -59,19 +50,71 @@ Alarm getAlarm(int baseLocation)
   
   int isPMFlag = EEPROM.read(baseLocation + OFFSET_PM);
   bool isPM = isPMFlag == 1;
-  
+
+  bool isEnabled = false;
+  bool isSetSunday = false;
+  bool isSetMonday = false;
+  bool isSetTuesday = false;
+  bool isSetWednesday = false;
+  bool isSetThursday = false;
+  bool isSetFriday = false;
+  bool isSetSaturday = false;
+    
   int enableFlags = EEPROM.read(baseLocation + OFFSET_ENABLE);
-  vector<Enable> flags;  
   for(int i = 0; i < 8; i++)
   {
     int testNum = pow(2, i);
-    bool flagEnabled = testNum & (1<<i)
+    bool flagEnabled = testNum & (1<<i);
     if(flagEnabled)
     {
       Enable value =  static_cast<Enable>(testNum);
-      flags.push_back(value);
+      switch(value) 
+      {
+        case Base:
+          isEnabled = true;
+          break;
+        case Sunday:
+          isSetSunday = true;
+          break;
+        case Monday:
+          isSetMonday = true;
+          break;
+        case Tuesday:
+          isSetTuesday = true;
+          break;
+        case Wednesday:
+          isSetWednesday = true;
+          break;
+        case Thursday:
+          isSetThursday = true;
+          break;
+        case Friday:
+          isSetFriday = true;
+          break;
+        case Saturday:
+          isSetSaturday = true;
+          break;      
+        default:
+          break; 
+      }
     }
   }
+
+  return Alarm
+  {
+    
+  };
+}
+
+Alarms& getAlarmsFromMemory() 
+{
+  Alarms arr;
+  for(int i = 1; i <= 4; i++)
+  {
+    int pos = getBaseLocation(i);
+    arr[i-1] = getAlarm(pos);
+  }
+  return arr;
 }
 
 void writeAlarmToMemory(Alarm a)

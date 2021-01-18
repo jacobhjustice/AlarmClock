@@ -1,3 +1,7 @@
+
+#ifndef ENABLE_H
+#define ENABLE_H
+
 enum Enable {
   Monday = 1, 
   Tuesday = 2,
@@ -8,3 +12,5 @@ enum Enable {
   Sunday = 64,
   Base = 128
 };
+
+#endif /* ENABLE_H */

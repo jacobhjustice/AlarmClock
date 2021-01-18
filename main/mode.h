@@ -1,3 +1,6 @@
+#ifndef MODE_H
+#define MODE_H
+
 enum Mode {
   None = 0,
   Alarm = 1,
@@ -11,4 +14,7 @@ enum Mode {
   BlinkThursday = 9,
   BlinkFriday = 10,
   BlinkSaturday = 11
-}
+};
+
+
+#endif /* MODE_H */
