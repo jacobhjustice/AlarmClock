@@ -1,5 +1,6 @@
 #include "LiquidCrystal.h"
 #include "clock.h"
+#include "time.h"
 #include "view.h"
 #include "mode.h"
 
@@ -15,7 +16,7 @@ bool _isEditingTime;
 View _activeView;
 Mode _activeMode;
 
-void InitializeDisplay()
+void initializeDisplay()
 {
   lcd.begin(16, 2);
   lcd.clear();
@@ -25,6 +26,17 @@ void InitializeDisplay()
   _activeMode = None;
 }
 
-void display()  {
 
+void displayMain() {
+  Time val = getTime();
+  lcd.setCursor(0, 0);
+  lcd.print(strcat(strcat(strcat(strcat(strcat(val.hour, ":"), val.minute), " "), val.am_pm), " Alarms:"));
+  lcd.setCursor(0, 1);
+  lcd.print(strcat(strcat(strcat(strcat(strcat(val.month, "/"), val.day), "/"), val.year), " 1 2 3 4"));
+}
+
+
+void display()  {
+  lcd.clear();
+  displayMain();
 }

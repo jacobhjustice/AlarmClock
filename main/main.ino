@@ -8,9 +8,9 @@
 
 void setup() {  
   Serial.begin(9600);
-  InitializeDisplay();
+  initializeDisplay();
 }
 
 void loop() {
-
+  display();
 }

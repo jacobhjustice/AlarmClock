@@ -2,13 +2,12 @@
 #define TIME_H
 
 struct Time {
-    int hours;
-    int minute;
-    int seconds;
-    bool isPM;
-    int day;
-    int month;
-    int year;
+    char hour[3];
+    char minute[3];
+    char am_pm[3];
+    char day[3];
+    char month[3];
+    char year[3];
 };
 
 #endif /* TIME_H */
