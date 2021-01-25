@@ -1,4 +1,4 @@
-#include "time.h"
+#include "clock_value.h"
 #include "RTClib.h"
 
 #define OFFSET_YEARS_RTC 2000
@@ -21,9 +21,11 @@ bool initializeTime()
   }
 }
 
-Time getTime() {
+ClockValue getTime() 
+{
   // Read DateTime fields
   DateTime current = rtc.now();
+  int second = current.second();
   int minute = current.minute();
   int hour = current.hour();
   int year = current.year();
@@ -51,8 +53,10 @@ Time getTime() {
 
   year = (year + OFFSET_YEARS_RTC) % 100;
 
-  Time value;
+  ClockValue value;
   char buffer[2];
+  itoa(second, buffer, 10);
+  value.second = buffer;
   itoa(minute, buffer, 10);
   value.minute = buffer;
   itoa(hour, buffer, 10);
@@ -67,7 +71,8 @@ Time getTime() {
   return value;
 }
 
-void setTime(Time input) {
+void setTime(ClockValue input) 
+{
   int year = OFFSET_YEARS_RTC + atoi(input.year); // Might need to tweak
   int month = atoi(input.month) - 1;
   int day = atoi(input.year);
@@ -78,6 +83,7 @@ void setTime(Time input) {
   rtc.adjust(DateTime(year, month, day, hour, minute, 0));
 }
 
-bool isAlarmTriggered() {
+bool isAlarmTriggered() 
+{
   
 }

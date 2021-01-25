@@ -2,11 +2,8 @@
 #ifndef MEMORY_ACCESS_H
 #define MEMORY_ACCESS_H
 
-Alarms& getAlarmsFromMemory();
-
-Alarm getAlarm(int baseLocation);
+Alarm* getAlarmsFromMemory();
 
 void writeAlarmToMemory(Alarm a);
 
 #endif /* MEMORY_ACCESS_H */
-

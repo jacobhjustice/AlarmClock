@@ -16,6 +16,7 @@
 
 #include <EEPROM.h>
 #include <math.h>
+#include "enable.h"
 #include "alarm.h"
 
 #define BASE_A1 1
@@ -28,21 +29,7 @@
 #define OFFSET_PM 2
 #define OFFSET_ENABLE 3
 
-int getBaseLocation(int alarmNum)
-{
-  switch(alarmNum) 
-  {
-    case 1:
-      return BASE_A1;
-    case 2:
-      return BASE_A2;
-    case 3:
-      return BASE_A3;
-    case 4:
-      return BASE_A4;
-  }
-}
-
+// Internal Functions
 Alarm getAlarm(int baseLocation)
 {
   int hrs = EEPROM.read(baseLocation + OFFSET_HOURS);
@@ -106,9 +93,25 @@ Alarm getAlarm(int baseLocation)
   };
 }
 
-Alarms& getAlarmsFromMemory() 
+int getBaseLocation(int alarmNum)
 {
-  Alarms arr;
+  switch(alarmNum) 
+  {
+    case 1:
+      return BASE_A1;
+    case 2:
+      return BASE_A2;
+    case 3:
+      return BASE_A3;
+    case 4:
+      return BASE_A4;
+  }
+}
+
+// External Functions
+Alarm* getAlarmsFromMemory() 
+{
+  Alarm arr[4];
   for(int i = 1; i <= 4; i++)
   {
     int pos = getBaseLocation(i);

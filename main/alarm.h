@@ -1,11 +1,12 @@
-#include "enable.h"
 #ifndef ALARM_H
 #define ALARM_H
 
-struct Alarm {
+typedef struct 
+{
   int id;
   int hour;
   int minute;
+  int second;
   bool isPM;
 
   bool isEnabled;
@@ -16,8 +17,6 @@ struct Alarm {
   bool isSetThursday;
   bool isSetFriday;
   bool isSetSaturday;
-};
-
-typedef Alarm Alarms[4];
+} Alarm;
 
 #endif /* ALARM_H */

@@ -1,9 +1,9 @@
-#include "time.h"
+#include "clock_value.h"
 
 #ifndef CLOCK_H
 #define CLOCK_H
 
-Time getTime();
+ClockValue getTime();
 
 void setTime();
 
