@@ -6,7 +6,6 @@ typedef struct
   int id;
   int hour;
   int minute;
-  int second;
   bool isPM;
 
   bool isEnabled;

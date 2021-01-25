@@ -1,4 +1,5 @@
 #include "clock_value.h"
+#include "alarm.h"
 #include "RTClib.h"
 
 #define OFFSET_YEARS_RTC 2000
@@ -83,7 +84,10 @@ void setTime(ClockValue input)
   rtc.adjust(DateTime(year, month, day, hour, minute, 0));
 }
 
-bool isAlarmTriggered() 
+bool isAlarmTriggered(ClockValue time, Alarm* alarms) 
 {
-  
+  for(int i = 0; i < 4; i++)
+  {
+    // Compare time == alarms[i]
+  }
 }

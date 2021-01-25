@@ -30,9 +30,27 @@
 #define OFFSET_ENABLE 3
 
 // Internal Functions
-Alarm getAlarm(int baseLocation)
+int getBaseLocation(int alarmNum)
 {
+  switch(alarmNum) 
+  {
+    case 1:
+      return BASE_A1;
+    case 2:
+      return BASE_A2;
+    case 3:
+      return BASE_A3;
+    case 4:
+      return BASE_A4;
+  }
+}
+
+Alarm getAlarm(int alarmNum)
+{
+  int baseLocation = getBaseLocation(alarmNum);
   int hrs = EEPROM.read(baseLocation + OFFSET_HOURS);
+  // HANDLE DEFAULT VALUE AND SHORT CIRCUIT TO DEFAULT FUNCTION
+  
   int mins = EEPROM.read(baseLocation + OFFSET_MINUTES);
   
   int isPMFlag = EEPROM.read(baseLocation + OFFSET_PM);
@@ -87,25 +105,20 @@ Alarm getAlarm(int baseLocation)
     }
   }
 
-  return Alarm
-  {
-    
-  };
-}
-
-int getBaseLocation(int alarmNum)
-{
-  switch(alarmNum) 
-  {
-    case 1:
-      return BASE_A1;
-    case 2:
-      return BASE_A2;
-    case 3:
-      return BASE_A3;
-    case 4:
-      return BASE_A4;
-  }
+  Alarm a;
+  a.id = alarmNum;
+  a.hour = hrs;
+  a.minute = mins;
+  a.isPM = isPM;
+  a.isEnabled = isEnabled;
+  a.isSetSunday = isSetSunday;
+  a.isSetMonday = isSetMonday;
+  a.isSetTuesday = isSetTuesday;
+  a.isSetWednesday = isSetWednesday;
+  a.isSetThursday = isSetThursday;
+  a.isSetFriday = isSetFriday;
+  a.isSetSaturday = isSetSaturday;
+  return a;
 }
 
 // External Functions
@@ -114,13 +127,49 @@ Alarm* getAlarmsFromMemory()
   Alarm arr[4];
   for(int i = 1; i <= 4; i++)
   {
-    int pos = getBaseLocation(i);
-    arr[i-1] = getAlarm(pos);
+    arr[i-1] = getAlarm(i);
   }
   return arr;
 }
 
 void writeAlarmToMemory(Alarm a)
 {
-  
+  int baseAddr = getBaseLocation(a.id);
+  EEPROM.write(baseAddr + OFFSET_HOURS, a.hour);
+  EEPROM.write(baseAddr + OFFSET_MINUTES, a.minute);
+  EEPROM.write(baseAddr + OFFSET_PM, a.isPM);
+  int enableValue = 0;
+  if(a.isEnabled)
+  {
+    enableValue += (int)Base;
+  }
+  if(a.isSetSunday)
+  {
+    enableValue += (int)Sunday;
+  }
+  if(a.isSetMonday)
+  {
+    enableValue += (int)Monday;
+  }
+  if(a.isSetTuesday)
+  {
+    enableValue += (int)Tuesday;
+  }
+  if(a.isSetWednesday)
+  {
+    enableValue += (int)Wednesday;
+  }
+  if(a.isSetThursday)
+  {
+    enableValue += (int)Thursday;
+  }
+  if(a.isSetFriday)
+  {
+    enableValue += (int)Friday;
+  }
+  if(a.isSetSaturday)
+  {
+    enableValue += (int)Saturday;
+  }
+  EEPROM.write(baseAddr + OFFSET_ENABLE, a.minute);
 }
