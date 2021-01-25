@@ -47,7 +47,8 @@ char* getAlarmNumberText(int alarmNum, bool isEditMode, ClockValue time)
   
   return " ";
 }
-void getMainText(ClockValue time, bool isTopRow) 
+
+char* getMainText(ClockValue time, bool isTopRow) 
 {
   char text[16];
   if(isTopRow)
@@ -75,20 +76,43 @@ void getMainText(ClockValue time, bool isTopRow)
     strcat(text, " ");
     strcat(text, getAlarmNumberText(4, _activeMode == BlinkAlarm4, time));
   }
+
+  return text;
+}
+
+char* getEditAlarmText(int alarmNum, ClockValue time, bool isTopRow) 
+{
+  char text[16];
+  if(isTopRow)
+  {
+  }
+  else
+  {
+  }
+  return "";
 }
 
 char* getRow(ClockValue time, bool isTopRow) 
 {
-  getMainText(time, isTopRow);
-}
-
-void displayMain() {
-  ClockValue val = getTime();
-  lcd.setCursor(0, 0);
-  //lcd.print(strcat
-  //lcd.print(strcat(strcat(strcat(strcat(strcat(val.hour, ":"), val.minute), " "), val.am_pm), " Alarms:"));
-  lcd.setCursor(0, 1);
-  lcd.print(strcat(strcat(strcat(strcat(strcat(val.month, "/"), val.day), "/"), val.year),  " 1 2 3 4"));
+  int alarmNum = 0;
+  switch(_activeView)
+  {
+    case Main:
+      return getMainText(time, isTopRow);
+    case EditAlarm1:
+      alarmNum = 1;
+      break;
+    case EditAlarm2:
+      alarmNum = 2;
+      break;
+    case EditAlarm3:
+      alarmNum = 3;
+      break;
+    case EditAlarm4:
+      alarmNum = 4;
+      break;
+  }
+  return getEditAlarmText(alarmNum, time, isTopRow);
 }
 
 // External Functions
@@ -111,5 +135,4 @@ void display()
   lcd.print(getRow(val, true));
   lcd.setCursor(0,1);
   lcd.print(getRow(val, false));
-  displayMain();
 }
