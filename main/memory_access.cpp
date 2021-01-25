@@ -171,5 +171,5 @@ void writeAlarmToMemory(Alarm a)
   {
     enableValue += (int)Saturday;
   }
-  EEPROM.write(baseAddr + OFFSET_ENABLE, a.minute);
+  EEPROM.write(baseAddr + OFFSET_ENABLE, enableValue);
 }
