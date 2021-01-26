@@ -5,6 +5,7 @@
 #include "view.h"
 #include "mode.h"
 #include "memory_access.h"
+#include "string.h"
 
 #define PIN_LCD_RS 12
 #define PIN_LCD_ENABLE 11
@@ -20,7 +21,17 @@ View _activeView;
 Mode _activeMode;
 
 // Internal Functions
-char * getText(char* text, bool isEditMode, ClockValue time)
+char* getWhitespace(int length)
+{
+    char buffer [length];
+  for(int i = 0; i < length; i++)
+  {
+    strcat(buffer, " ");
+  }
+  return buffer;
+}
+
+char* getText(char* text, bool isEditMode, ClockValue time)
 {
   if(!isEditMode)
   {
@@ -33,7 +44,7 @@ char * getText(char* text, bool isEditMode, ClockValue time)
     return text;
   }
 
-  return " ";
+  return getWhitespace(strlen(text));
 }
 
 char* getAlarmNumberText(int alarmNum, bool isEditMode, ClockValue time)
@@ -45,7 +56,32 @@ char* getAlarmNumberText(int alarmNum, bool isEditMode, ClockValue time)
     return getText(buffer, isEditMode, time);
   }
   
-  return " ";
+  return getWhitespace(strlen(buffer));
+}
+
+char* getTextIfVisibleOrEditing(char text, bool isVisible, bool isEditMode, ClockValue time)
+{
+  if(isEditMode)
+  {
+    return getText(text, isEditMode, time);
+  }
+  if(isVisible)
+  {
+    return text;
+  }
+  return getWhitespace(strlen(text));
+}
+
+char* getAlarmOnOffText(bool isEnabled, bool isEditMode, ClockValue time)
+{
+  if(isEnabled)
+  {
+    return strcat(getText("ON", isEditMode, time), " ");
+  }
+  else
+  {
+    return getText("OFF", isEditMode, time);
+  }
 }
 
 char* getMainText(ClockValue time, bool isTopRow) 
@@ -83,13 +119,21 @@ char* getMainText(ClockValue time, bool isTopRow)
 char* getEditAlarmText(int alarmNum, ClockValue time, bool isTopRow) 
 {
   char text[16];
+  Alarm a = _alarms[alarmNum - 1];
   if(isTopRow)
   {
+    strcat(text, "ALARM ");
+    char buffer[1];
+    itoa(alarmNum, buffer, 10);
+    strcat(text, buffer);
+    strcat(text, ": ");
+    strcat(text, "");
   }
   else
   {
+    
   }
-  return "";
+  return text;
 }
 
 char* getRow(ClockValue time, bool isTopRow) 
