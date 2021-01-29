@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "display.h"
 #include "memory_access.h"
-#include "alarm.h"
+#include "clock.h"
 
 //Mode _activeMode;
 //View _activeView;

@@ -21,6 +21,7 @@ enum Mode {
   BlinkMonth = 16,
   BlinkDay = 17,
   BlinkYear = 18,
+  BlinkOnOff = 19
 };
 
 

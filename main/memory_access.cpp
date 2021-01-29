@@ -17,7 +17,7 @@
 #include <EEPROM.h>
 #include <math.h>
 #include "enable.h"
-#include "alarm.h"
+#include "clock.h"
 
 #define BASE_A1 1
 #define BASE_A2 6

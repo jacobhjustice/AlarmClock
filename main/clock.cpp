@@ -1,5 +1,4 @@
-#include "clock_value.h"
-#include "alarm.h"
+#include "clock.h"
 #include "RTClib.h"
 
 #define OFFSET_YEARS_RTC 2000
@@ -68,7 +67,7 @@ ClockValue getTime()
   value.month = buffer;
   itoa(day, buffer, 10);
   value.day = buffer;
-  value.am_pm = isPM ? "PM" : "AM";
+  value.isPM = isPM;
   return value;
 }
 
@@ -90,4 +89,51 @@ bool isAlarmTriggered(ClockValue time, Alarm* alarms)
   {
     // Compare time == alarms[i]
   }
+}
+
+char* getFormatted2Digit(int value)
+{
+  char result[2];
+  itoa(value, result, 10);
+  if(value < 10)
+  {
+    return strcat("0", result);
+  }
+  return result;
+}
+
+char* getFormattedHour(int value)
+{
+  return getFormatted2Digit(value);
+}
+
+char* getFormattedMinute(int value)
+{
+  return getFormatted2Digit(value);
+}
+
+char* getFormattedAMPM(bool isPM)
+{
+  if(isPM)
+  {
+    return "PM";
+  }
+  
+  return "AM";
+}
+
+char* getFormattedDay(int value)
+{
+  return getFormatted2Digit(value);
+}
+
+char* getFormattedMonth(int value)
+{
+  return getFormatted2Digit(value);
+}
+
+char* getFormattedYear(int value)
+{
+  value = value % 100;
+  return getFormatted2Digit(value);
 }

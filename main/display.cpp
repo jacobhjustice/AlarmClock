@@ -1,7 +1,5 @@
 #include "LiquidCrystal.h"
-#include "alarm.h"
 #include "clock.h"
-#include "clock_value.h"
 #include "view.h"
 #include "mode.h"
 #include "memory_access.h"
@@ -23,7 +21,7 @@ Mode _activeMode;
 // Internal Functions
 char* getWhitespace(int length)
 {
-    char buffer [length];
+  char buffer [length];
   for(int i = 0; i < length; i++)
   {
     strcat(buffer, " ");
@@ -31,57 +29,37 @@ char* getWhitespace(int length)
   return buffer;
 }
 
-char* getText(char* text, bool isEditMode, ClockValue time)
-{
-  if(!isEditMode)
-  {
-    return text;
-  }
-  
-  int secs = atoi(time.second);
-  if(secs % 2 == 0)
-  {
-    return text;
-  }
-
-  return getWhitespace(strlen(text));
-}
-
-char* getAlarmNumberText(int alarmNum, bool isEditMode, ClockValue time)
+char* getAlarmNumberText(int alarmNum)
 {
   char buffer[1];
   if(_alarms[alarmNum - 1].isEnabled)
   {
     itoa(alarmNum, buffer, 10);
-    return getText(buffer, isEditMode, time);
+    return buffer;
   }
   
-  return getWhitespace(strlen(buffer));
+  return getWhitespace(1);
 }
 
-char* getTextIfVisibleOrEditing(char text, bool isVisible, bool isEditMode, ClockValue time)
-{
-  if(isEditMode)
-  {
-    return getText(text, isEditMode, time);
-  }
-  if(isVisible)
-  {
-    return text;
-  }
-  return getWhitespace(strlen(text));
-}
-
-char* getAlarmOnOffText(bool isEnabled, bool isEditMode, ClockValue time)
+char* getAlarmOnOffText(bool isEnabled)
 {
   if(isEnabled)
   {
-    return strcat(getText("ON", isEditMode, time), " ");
+    return "ON ";
   }
   else
   {
-    return getText("OFF", isEditMode, time);
+    return "OFF";
   }
+}
+
+char* getCharIfEnabled(char text, bool isEnabled)
+{
+  if(isEnabled)
+  {
+    return text;
+  }
+  return " ";
 }
 
 char* getMainText(ClockValue time, bool isTopRow) 
@@ -89,28 +67,28 @@ char* getMainText(ClockValue time, bool isTopRow)
   char text[16];
   if(isTopRow)
   {
-    strcat(text, getText(time.hour, _activeMode == BlinkHours, time));
+    strcat(text, getFormattedHour(time.hour));
     strcat(text, ":");
-    strcat(text, getText(time.minute, _activeMode == BlinkMinutes, time));
+    strcat(text, getFormattedMinute(time.minute));
     strcat(text, " ");
-    strcat(text, getText(time.am_pm, _activeMode == BlinkAMPM, time));
+    strcat(text, getFormattedAMPM(time.isPM));
     strcat(text, " Alarms:"); // Double checck EXE for null char overflow
   }
   else
   {
-    strcat(text, getText(time.month, _activeMode == BlinkMonth, time));
+    strcat(text, getFormattedMonth(time.month));
     strcat(text, "/");
-    strcat(text, getText(time.day, _activeMode == BlinkDay, time));
+    strcat(text, getFormattedDay(time.day));
     strcat(text, "/");
-    strcat(text, getText(time.year, _activeMode == BlinkYear, time));
+    strcat(text, getFormattedYear(time.year));
     strcat(text, " ");
-    strcat(text, getAlarmNumberText(1, _activeMode == BlinkAlarm1, time));
+    strcat(text, getAlarmNumberText(1));
     strcat(text, " ");
-    strcat(text, getAlarmNumberText(2, _activeMode == BlinkAlarm2, time));
+    strcat(text, getAlarmNumberText(2));
     strcat(text, " ");
-    strcat(text, getAlarmNumberText(3, _activeMode == BlinkAlarm3, time));
+    strcat(text, getAlarmNumberText(3));
     strcat(text, " ");
-    strcat(text, getAlarmNumberText(4, _activeMode == BlinkAlarm4, time));
+    strcat(text, getAlarmNumberText(4));
   }
 
   return text;
@@ -127,11 +105,24 @@ char* getEditAlarmText(int alarmNum, ClockValue time, bool isTopRow)
     itoa(alarmNum, buffer, 10);
     strcat(text, buffer);
     strcat(text, ": ");
-    strcat(text, "");
+    strcat(text, getAlarmOnOffText(a.isEnabled));
+    strcat(text, "    ");
   }
   else
   {
-    
+    strcat(text, getFormattedHour(a.hour));
+    strcat(text, ":");
+    strcat(text, getFormattedMinute(a.minute));
+    strcat(text, " ");
+    strcat(text, getFormattedAMPM(a.isPM));
+    strcat(text, " ");
+    strcat(text, getCharIfEnabled("S", a.isSetSunday));
+    strcat(text, getCharIfEnabled("M", a.isSetMonday));
+    strcat(text, getCharIfEnabled("T", a.isSetTuesday));
+    strcat(text, getCharIfEnabled("W", a.isSetWednesday));
+    strcat(text, getCharIfEnabled("T", a.isSetThursday));
+    strcat(text, getCharIfEnabled("F", a.isSetFriday));
+    strcat(text, getCharIfEnabled("S", a.isSetSaturday));
   }
   return text;
 }
